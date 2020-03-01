@@ -225,19 +225,27 @@ probCov=probTX.*probCovCond
 %%TEST
 % [probCov,probTX,probCovCond]=funProbCovPairsDet(xxTX,yyTX,xxRX,yyRX,fun_h,fun_w,L,1)
 
-
 %%% START -- Plotting -- START %%%
 if ~isempty(indexDPP)
     figure;hold on;
-    markerSizeNumb=80; %marker size of markers colors
-    vectorColor=rand(1,3).^(1); %random vector for colors of
-    %Plot point process
-    plot(xxTX,yyTX,'ko','MarkerSize',markerSizeNumb/6);
-    %Plot determinantally-thinned point process
-    plot(xxTX(indexDPP),yyTX(indexDPP),'.','MarkerSize',markerSizeNumb/3,'color',vectorColor);
-    grid;
-    axis square;set(gca,'YTick',[]); set(gca,'XTick',[]);
-    legend('Original point process', 'Determinantal subset');
+        markerSizeNumb=10; %marker size 
+        plot(xxTX,yyTX,'ko','MarkerSize',markerSizeNumb); 
+        plot(xxRX,yyRX,'kx','MarkerSize',markerSizeNumb);        
+        plot([xxTX';xxRX'],[yyTX';yyRX'],'--k');
+    for ii=1:length(indexDPP)
+        vectorColor=rand(1,3).^(1); %random vector for marker colors 
+        %plot transmitter
+        plot(xxTX(indexDPP(ii)),yyTX(indexDPP(ii)),'o','color',...
+            vectorColor,'MarkerSize',markerSizeNumb);
+        %plot receiver
+        plot(xxRX(indexDPP(ii)),yyRX(indexDPP(ii)),'x','color',...
+            vectorColor,'MarkerSize',markerSizeNumb);
+        %plot line connecting transmitter and receiver
+        plot([xxTX(indexDPP(ii));xxRX(indexDPP(ii))],....
+            [yyTX(indexDPP(ii));yyRX(indexDPP(ii))],'color',vectorColor);
+        axis square;set(gca,'YTick',[]); set(gca,'XTick',[]);
+    end
+    
 end
 %%% END -- Plotting -- END %%%
 
