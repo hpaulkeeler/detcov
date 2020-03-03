@@ -1,5 +1,5 @@
 # detcov_matlab
-Coverage probability in a determinantally-thinned network (in MATLAB).
+Coverage probability in determinantal networks (in MATLAB).
 
 We propose a new class of algorithms for randomly scheduling wireless network transmissions. The idea is to use (discrete) determinantal point processes (subsets) to randomly assign medium access to  various repulsive subsets of potential transmitters. This approach can be seen as a  natural  extension of (spatial) Aloha, which schedules transmissions independently. Under a general path loss model and Rayleigh fading, we show that, similarly to Aloha, they are also subject to elegant analysis of the coverage probabilities and transmission attempts (also known as local delay). This is mainly due to the explicit, determinantal form of the conditional (Palm) distribution and closed-form  expressions for the Laplace functional of determinantal processes. Interestingly, the derived performance characteristics of the network are amenable to various optimizations of the scheduling parameters, which are determinantal kernels, allowing the use of techniques developed for statistical  learning with determinantal processes. Well-established sampling algorithms for determinantal processes can be used to cope with implementation issues, which is is beyond the scope of this paper, but it creates paths for further research.
 
