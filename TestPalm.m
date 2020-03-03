@@ -1,5 +1,7 @@
-% This code thins a point process using a determinantal thinning. Then the
-% various Palm results are checked empirically against numerical results. 
+% This code thins a random point process using a determinantal thinning.
+% Then the various Palm results are checked empirically against numerical
+% results. The matrix kernels for the non-reduced and reduced Palm
+% distributions are calculated by the function funPalm.
 %
 % This code was originally written by H.P Keeler for the paper by
 % B\laszczyszyn, Brochard and Keeler[1].
@@ -17,13 +19,11 @@ close all;
 clearvars; clc;
 
 %set random seed for reproducibility
-rng(1);
-
-choiceExample=1; %1 or 2 for a random (uniform) or deterministic example
+%rng(1);
 
 %%%START -- Parameters -- START%%%
+choiceExample=1; %1 or 2 for a random (uniform) or deterministic example
 numbSim=10^4; %number of simulations
-
 numbPoints=10;%number of pairs
 
 indexX=1; %index for point X
@@ -36,23 +36,20 @@ choiceKernel=1; %1 for Gaussian (ie squared exponetial );2 for Cauchy
 sigma=1;% parameter for Gaussian and Cauchy kernel
 alpha=1;% parameter for Cauchy kernel
 
-
 %Simulation window parameters
-xMin=-1;xMax=1;yMin=-1;yMax=1;
-xDelta=xMax-xMin;yDelta=yMax-yMin; %rectangle dimensions
-xx0=mean([xMin,xMax]); yy0=mean([yMin,yMax]); %centre of window
+xMin=-1; xMax=1; %x dimensions
+yMin=-1; yMax=1; %y dimensions
+xDelta=xMax-xMin; %rectangle width
+yDelta=yMax-yMin; %rectangle height
 %%%END -- Parameters -- END%%%
 
 %Simulate a random point process for the network configuration
-%interferer section
 if choiceExample==1
     %random (uniform) x/y coordinates
-    %transmitters or receivers
     xx=xDelta*(rand(numbPoints,1))+xMin;
     yy=yDelta*(rand(numbPoints,1))+yMin;
 else
     %non-random x/y coordinates
-    %all transmitters
     t=2*pi*(linspace(0,(numbPoints-1)/numbPoints,numbPoints)');
     xx=(1+cos(5*t+1))/2;
     yy=(1+sin(3*t+2))/2;
@@ -79,17 +76,16 @@ end
 
 %%%START Empirical Connection Proability (ie SINR>thresholdConst) START%%%
 %initialize  boolean vectors/arrays for collecting statistics
-booleExistX=false(numbSim,1); %first point exist
-booleExistY=false(numbSim,1); %second point exist
-boolePairExists=false(numbSim,1); %transmitter-receiver pair exists
+booleX=false(numbSim,1); %first point exist
+booleY=false(numbSim,1); %second point exist
 booleConfig=false(numbSim,1); %configuration exists
 numbConfig=length(indexConfig); %number of points in configuration
 %loop through all simulations
 for ss=1:numbSim
     indexDPP=funSimSimpleDPP(eigenVecL,eigenValL);
     
-    booleExistX(ss)=any(indexDPP==indexX);
-    booleExistY(ss)=any(indexDPP==indexY);
+    booleX(ss)=any(indexDPP==indexX);
+    booleY(ss)=any(indexDPP==indexY);
     
     indexTemp=setdiff(indexDPP,[indexX,indexY]); %remove X and Y
     
@@ -97,7 +93,7 @@ for ss=1:numbSim
     booleConfig(ss)=sum(ismember(indexConfig,indexTemp))==numbConfig;
     
 end
-booleExistXY=booleExistX&booleExistY;
+booleXY=booleX&booleY;
 %%%END Empirical Connection Proability (ie SINR>thresholdConst) END%%%
 
 %%%START Numerical Connection Proability (ie SINR>thresholdConst) START%%%
@@ -105,26 +101,26 @@ K=funLtoK(L); %caclulate K kernel from kernel L
 sizeK=size(K,1); %number of columns/rows in kernel matrix K
 
 %Probabity of single points
-probXEmp=mean(booleExistX)
+probXEmp=mean(booleX)
 probX=K(indexX,indexX)
 
-probYEmp=mean(booleExistY)
+probYEmp=mean(booleY)
 probY=K(indexY,indexY)
 
 probConfigEmp=mean(booleConfig)
 probConfig=det(K(indexConfig,indexConfig))
 
 %probability of configuration conditioned on a single point
-probConfigXEmp=mean(booleConfig(booleExistX))
+probConfigXEmp=mean(booleConfig(booleX))
 [KPalmReducedX,KPalmX]=funPalmK(K,indexX);
 probConfigX=det(KPalmX(indexConfig,indexConfig))
 
-probConfigYEmp=mean(booleConfig(booleExistY))
+probConfigYEmp=mean(booleConfig(booleY))
 [KPalmReducedY,KPalmY]=funPalmK(K,indexY);
 probConfigY=det(KPalmY(indexConfig,indexConfig))
 
 %probability of configuration conditioned on two points
-probConfigXYEmp=mean(booleConfig(booleExistXY))
+probConfigXYEmp=mean(booleConfig(booleXY))
 [KPalmReducedXY,KPalmXY]=funPalmK(KPalmX,indexY);
 probConfigXY=det(KPalmXY(indexConfig,indexConfig))
 
@@ -132,18 +128,17 @@ probConfigXY=det(KPalmXY(indexConfig,indexConfig))
 probConfigYX=det(KPalmYX(indexConfig,indexConfig))
 
 %probability of point Y existing given X
-probYGivenXEmp=mean(booleExistY(booleExistX))
+probYGivenXEmp=mean(booleY(booleX))
 probYGivenX=det(KPalmX(indexY,indexY))
 
 %probability of point X existing given Y
-probXGivenYEmp=mean(booleExistY(booleExistX))
+probXGivenYEmp=mean(booleY(booleX))
 probXGivenY=det(KPalmY(indexX,indexX))
 
 %probability of configuration conditioned on point X existing and point Y
 %not existing
-probConfigXNotYEmp=mean(booleConfig(booleExistX&(~booleExistY)))
+probConfigXNotYEmp=mean(booleConfig(booleX&(~booleY)))
 probConfigXNotY=(probConfigX-probYGivenX*probConfigXY)/(1-probYGivenX)
-
 %%%END Numerical Connection Proability END%%%
 
 if ~isempty(indexDPP)

@@ -3,21 +3,21 @@
 % network has a random medium access control (MAC) scheme based on a
 % determinantal point process, as outlined in the paper[1] by
 % B\laszczyszyn, Brochard and Keeler. This code validates by simulation
-% Lemma II.1 in the paper[1]. This result gives the probability of
-% coverage based on the SINR value of a transmitter-receiver pair in
-% a non-random network of transmitter-receiver pairs such as a realization
-% of a random point process.
+% Propositions III.1 and III.2 in the paper[1]. These results give the 
+% probability of coverage based on the SINR value of a transmitter-receiver
+% pair in a non-random network of transmitter-receiver pairs such as a 
+% realization of a random point process.
 %
 % The simulation section estimates the empirical probability of SINR-based
 % coverage. For a large enough number of simulations, this empirical result
-% will agree with the analytic result given in INSERT RESULT in the paper[2].
-%
+% will agree with the analytic result given by Propositions III.1 and III.2
+% in the paper[1].
 %
 % By coverage, it is assumed that the transmitter-receiver pair are active
 % *and* the SINR of the transmitter is larger than some threshold at the
 % corresponding receiver.
 %
-% This code was originally written by H.P Keeler for the paper by
+% This code was originally written by H.P Keeler for the paper[1].
 %
 % If you use this code in published research, please cite paper[1].
 %
@@ -35,12 +35,13 @@ clearvars; clc;
 %set random seed for reproducibility
 %rng(1);
 
-choiceExample=1; %1 or 2 for a random (uniform) or deterministic example
-
 %%%START -- Parameters -- START%%%
+%configuration choice
+choiceExample=2; %1 or 2 for a random (uniform) or deterministic example
+
 numbSim=10^4; %number of simulations
 
-numbPairs=10;%number of pairs
+numbPairs=5;%number of pairs
 
 indexTransPair=1; %index for transmitter-receiver pair
 % the above index has to be such that 1<=indexTransPair<=numbPairs
@@ -60,9 +61,12 @@ sigma=1;% parameter for Gaussian and Cauchy kernel
 alpha=1;% parameter for Cauchy kernel
 
 %Simulation window parameters
-xMin=-1;xMax=1;yMin=-1;yMax=1;
-xDelta=xMax-xMin;yDelta=yMax-yMin; %rectangle dimensions
-xx0=mean([xMin,xMax]); yy0=mean([yMin,yMax]); %centre of window
+xMin=-1;xMax=1; %x dimensions
+yMin=-1;yMax=1; %y dimensions
+xDelta=xMax-xMin; %rectangle width
+yDelta=yMax-yMin; %rectangle height
+xx0=mean([xMin,xMax]); %x centre of window
+yy0=mean([yMin,yMax]); %y centre of window
 %%%END -- Parameters -- END%%%
 
 %Simulate a random point process for the network configuration
@@ -125,18 +129,15 @@ fun_w=@(r)(exp(-(thresholdSINR/muFading)*constNoise./funPathloss(r)));
 
 %%%START Empirical Connection Proability (ie SINR>thresholdConst) START%%%
 %initialize  boolean vectors/arrays for collecting statistics
-boolePairExists=false(numbSim,1); %transmitter-receiver pair exists
-booleCov=false(numbSim,1); %transmitter-receiver pair is connected
 booleTX=false(numbSim,1); %transmitter-receiver pair exists
+booleCov=false(numbSim,1); %transmitter-receiver pair is connected
 %loop through all simulations
 for ss=1:numbSim
     indexDPP=funSimSimpleDPP(eigenVecL,eigenValL);
     %if transmitter-receiver pair exists in the determinantal outcome
     booleTX(ss)=any(indexDPP==indexTransPair);
     
-    if booleTX(ss)
-        boolePairExists(ss)=true;
-        
+    if booleTX(ss)        
         %create Boolean variable for active interferers
         booleTransmit=false(numbPairs,1);
         booleTransmit(indexDPP)=true;

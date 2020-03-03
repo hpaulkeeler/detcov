@@ -59,8 +59,8 @@ xx=xx(:);
 yy=yy(:);
 
 %transmitter location
-%xxTX=xx(indexTrans);
-%yyTX=yy(indexTrans);
+xxTX=xx(indexTrans);
+yyTX=yy(indexTrans);
 
 %Receiver location
 xxRX=xx(indexRec);
@@ -72,13 +72,13 @@ K=funLtoK(L); %caclulate K kernel from kernel L
 sizeK=size(K,1); %number of columns/rows in kernel matrix K
 
 %Calculate all respective distances (based on random network configuration)
-%transmitters to other receivers
+%from all transmitters to receiver
 dist_ji_xx=bsxfun(@minus,xx,xxRX');
 dist_ji_yy=bsxfun(@minus,yy,yyRX');
 dist_ji=hypot(dist_ji_xx,dist_ji_yy); %Euclidean distances
 %transmitters to receivers
-dist_ii_xx=xx-xxRX;
-dist_ii_yy=yy-yyRX;
+dist_ii_xx=xxTX-xxRX;
+dist_ii_yy=yyTX-yyRX;
 dist_ii=hypot(dist_ii_xx,dist_ii_yy); %Euclidean distances
 dist_ii=repmat(dist_ii',sizeK,1);%repeat cols for element-wise evaluation
 

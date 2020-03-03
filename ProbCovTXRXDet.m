@@ -44,10 +44,9 @@ clearvars; clc;
 %set random seed for reproducibility
 rng(1);
 
-choiceExample=1; %1 or 2 for a random (uniform) or deterministic example
-
 %%%START -- Parameters -- START%%%
-numbSim=10^4; %number of simulations
+choiceExample=1; %1 or 2 for a random (uniform) or deterministic example
+numbSim=10^6; %number of simulations
 numbNodes=10; %number of pairs
 indexTrans=1; %index for transmitter
 indexRec=2; %index for receiver
@@ -70,9 +69,12 @@ alpha=1;% parameter for Cauchy kernel
 pAloha=0.5; %parameter for independent kernel (ie proportion transmitting)
 
 %Simulation window parameters
-xMin=-1;xMax=1;yMin=-1;yMax=1;
-xDelta=xMax-xMin;yDelta=yMax-yMin; %rectangle dimensions
-xx0=mean([xMin,xMax]); yy0=mean([yMin,yMax]); %centre of window
+xMin=-1; xMax=1; %x dimensions
+yMin=-1; yMax=1; %y dimensions
+xDelta=xMax-xMin; %rectangle width
+yDelta=yMax-yMin; %rectangle height
+xx0=mean([xMin,xMax]); %x centre of window
+yy0=mean([yMin,yMax]); %y centre of window
 %%%END -- Parameters -- END%%%
 
 %Simulate a random point process for the network configuration
@@ -84,7 +86,7 @@ if choiceExample==1
     yy=yDelta*(rand(numbNodes,1))+yMin;
 else
     %non-random x/y coordinates
-    %all transmitters
+    %transmitters or receivers
     t=2*pi*(linspace(0,(numbNodes-1)/numbNodes,numbNodes)');
     xx=(1+cos(5*t+1))/2;
     yy=(1+sin(3*t+2))/2;
@@ -184,13 +186,13 @@ K=funLtoK(L); %caclulate K kernel from kernel L
 sizeK=size(K,1); %number of columns/rows in kernel matrix K
 
 %Calculate all respective distances (based on random network configuration)
-%transmitters to other receivers
+%from all transmitters to receiver
 dist_ji_xx=bsxfun(@minus,xx,xxRX');
 dist_ji_yy=bsxfun(@minus,yy,yyRX');
 dist_ji=hypot(dist_ji_xx,dist_ji_yy); %Euclidean distances
 %transmitters to receivers
-dist_ii_xx=xx-xxRX;
-dist_ii_yy=yy-yyRX;
+dist_ii_xx=xxTX-xxRX;
+dist_ii_yy=yyTX-yyRX;
 dist_ii=hypot(dist_ii_xx,dist_ii_yy); %Euclidean distances
 dist_ii=repmat(dist_ii',sizeK,1);%repeat cols for element-wise evaluation
 
@@ -257,7 +259,7 @@ probA_GivenBNotC=det(eye(sizeK-1)-KReduced_hRX)*W_x(indexTrans)
 probA_GivenBNotC_Emp=mean(booleA(booleNotC))
 
 %probability B given NOT C (ie a transmitter exists at indexRec)
-probB_GivenNotC=det(KPalmRX(indexTrans,indexTrans))
+probB_GivenNotC=KPalmRX(indexTrans,indexTrans)
 probB_GivenNotC_Emp=mean(booleB(booleNotC))
 
 %probability B given C
@@ -265,7 +267,7 @@ probB_GivenC=(probB-(1-probC)*probB_GivenNotC)/probC
 probB_GivenC_Emp=mean(booleB(booleC))
 
 %probability NOT C (ie a transmitter exists at indexRec) given B
-probNotC_GivenB=det(KPalmTX(indexRec,indexRec))
+probNotC_GivenB=KPalmTX(indexRec,indexRec)
 probNotC_GivenB_Emp=mean(booleNotC(booleB))
 
 %probability C given B
@@ -279,7 +281,7 @@ probA_GivenBandC=(probA_GivenB-probNotC_GivenB*probA_GivenBNotC)...
 
 %Estimate empirical probability two different ways
 %Directly
-probA_GivenBandC_Emp1=mean(booleA(booleB&booleC))
+probA_GivenBandC_Emp1=mean(booleA(booleBandC))
 %Indirectly
 probA_GivenBandC_Emp2=(probA_GivenB_Emp-probNotC_GivenB_Emp*probA_GivenBNotC_Emp)...
     /probC_GivenB_Emp;
@@ -298,8 +300,8 @@ probCov_Emp1=mean(booleA&booleB&booleC)
 %%%END Connection Proability (ie SINR>thresholdConst) END%%%
 
 %TEST
-%[probCov,probTXRX,probCovCond]=funProbCovTXRXDet(xx,yy,...
-%   fun_h,fun_w,L,indexTrans,indexRec)
+[probCov,probTXRX,probCovCond]=funProbCovTXRXDet(xx,yy,...
+   fun_h,fun_w,L,indexTrans,indexRec)
 
 
 if ~isempty(indexDPP)

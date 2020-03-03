@@ -106,12 +106,13 @@ indexDPP=sort(indexDPP); %sort index in ascending order
 %%% START -- Plotting -- START %%%
 figure;hold on;
 markerSizeNumb=80; %marker size of markers colors
-vectorColor=rand(1,3).^(1); %random vector for colors of
+vectorColor=rand(1,3); %random vector for colors of marker
 %Plot Poisson point process
 plot(xx,yy,'ko','MarkerSize',markerSizeNumb/6);
 %Plot determinantally-thinned Poisson point process
 plot(xx(indexDPP),yy(indexDPP),'.','MarkerSize',markerSizeNumb/3,'color',vectorColor);
-grid;
-axis square;set(gca,'YTick',[]); set(gca,'XTick',[]);
+axis square;
+set(gca,'YTick',[]); 
+set(gca,'XTick',[]);
 legend('Poisson process', 'Determinantal Poisson');
 %%% END -- Plotting -- END %%%
