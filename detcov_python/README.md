@@ -5,9 +5,9 @@ We propose a new class of algorithms for randomly scheduling wireless network tr
 
 We have implemented all our mathematical results into MATLAB and Python code, which is located in  the respective repositories
 
-https://github.com/hpaulkeeler/detcov_matlab
+https://github.com/hpaulkeeler/detschedule/tree/master/detcov_matlab
 
-https://github.com/hpaulkeeler/detcov_python
+https://github.com/hpaulkeeler/detschedule/tree/master/detcov_python
 
 We have also written the corresponding network simulations. The mathematical results agree excellently with simulations, which reminds us that determinantal point processes do not suffer from edge effects (induced by finite simulation windows). All mathematical and simulation results were obtained on a standard desktop machine, taking typically seconds to be executed. 
 
