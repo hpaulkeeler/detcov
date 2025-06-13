@@ -353,7 +353,7 @@ for indexPlot in range(numbPlot):
     plt.xticks(indexPairs)
 
     if indexPlot==0:
-        str_yLabel='Coverage probability P_i';
+        str_yLabel='Coverage probability $P_i$';
         # retrieve plotting data
         dataPlotDet = probCovDet_s;
         dataPlotMeanDet = probCovMeanDet;

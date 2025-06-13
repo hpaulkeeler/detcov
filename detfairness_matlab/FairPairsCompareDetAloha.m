@@ -322,7 +322,7 @@ for indexPlot = 1:numbPlot
     figure;
     hold on;
     set(gcf,'DefaultLineLineWidth',2);
-    set(gca, 'FontSize', 14);
+    set(gca, 'FontSize', 13);
     xticks(indexPairs);
 
     if indexPlot == 1
