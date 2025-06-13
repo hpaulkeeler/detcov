@@ -208,12 +208,12 @@ for indexSim = 1:numbSim
         if  indexModel == 2
             % Adaptive Aloha
             thetaGuess = ones(numbPairs,1);
-            paramKernel_m = 0;
+            paramKernel_m = 0;  %setting sigma = 0
         end
         if  indexModel == 3
             % Fixed Aloha
             thetaGuess = 1;
-            paramKernel_m = 0;
+            paramKernel_m = 0;  %setting sigma = 0
         end
 
         % calculate similarity matrix S

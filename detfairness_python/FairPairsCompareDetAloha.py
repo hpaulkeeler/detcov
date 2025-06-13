@@ -233,12 +233,12 @@ for indexSim in range(numbSim):
         if  indexModel==1:
             # Adaptive Aloha
             thetaGuess = np.ones(numbPairs);
-            paramKernel_m = np.array(0).flat;
+            paramKernel_m = np.array(0).flat; #setting sigma = 0
         # end - if
         if  indexModel==2:
             # Fixed Aloha
             thetaGuess = np.array(1).flat;
-            paramKernel_m = np.array(0).flat;
+            paramKernel_m = np.array(0).flat;  #setting sigma = 0
         # end - if
 
         # calculate similarity matrix S
