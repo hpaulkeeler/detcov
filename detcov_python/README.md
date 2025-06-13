@@ -1,0 +1,17 @@
+# detcov_python
+ Coverage probability in determinantal networks (in Python).
+
+We propose a new class of algorithms for randomly scheduling wireless network transmissions. The idea is to use (discrete) determinantal point processes (subsets) to randomly assign medium access to  various repulsive subsets of potential transmitters. This approach can be seen as a  natural  extension of (spatial) Aloha, which schedules transmissions independently. Under a general path loss model and Rayleigh fading, we show that, similarly to Aloha, they are also subject to elegant analysis of the coverage probabilities and transmission attempts (also known as local delay). This is mainly due to the explicit, determinantal form of the conditional (Palm) distribution and closed-form  expressions for the Laplace functional of determinantal processes. Interestingly, the derived performance characteristics of the network are amenable to various optimizations of the scheduling parameters, which are determinantal kernels, allowing the use of techniques developed for statistical  learning with determinantal processes. Well-established sampling algorithms for determinantal processes can be used to cope with implementation issues, which is is beyond the scope of this paper, but it creates paths for further research.
+
+We have implemented all our mathematical results into MATLAB and Python code, which is located in  the respective repositories
+
+https://github.com/hpaulkeeler/detcov_matlab
+
+https://github.com/hpaulkeeler/detcov_python
+
+We have also written the corresponding network simulations. The mathematical results agree excellently with simulations, which reminds us that determinantal point processes do not suffer from edge effects (induced by finite simulation windows). All mathematical and simulation results were obtained on a standard desktop machine, taking typically seconds to be executed. 
+
+For a starting point, run the (self-contained) files DemoDetPoisson.m or DemoDetPoisson.py to simulate or sample a single determinantally-thinned Poisson point process. The determinantal simulation is also performed by the file funSimSimpleDPP.m/py, which requires the eigendecomposition of a L kernel matrix.
+
+The mathematical results for transmitter-and-receiver pair network are implemented in the file ProbCovPairsDet.m/py; also see funProbCovPairsDet.m/py. The  mathematical results for transmitter-or-receiver network are implemented in the file ProbCovTXRXDet.m/py; also see funProbCovTXRXDet.m/py. These files typically require other files located in the repositories. 
+
