@@ -13,7 +13,7 @@ Some of the code  was used to generate results for published papers.
 
 The paper:
 
-* 2020 – Błaszczyszyn, Brochard, and Keeler, `Coverage probability in wireless networks with determinantal scheduling'.
+* 2020 – Błaszczyszyn, Brochard, and Keeler, _Coverage probability in wireless networks with determinantal scheduling_.
 
 We have implemented all our mathematical results in MATLAB and Python code, which is located in  the respective repositories:
 
@@ -27,7 +27,7 @@ The mathematical results for transmitter-and-receiver pair network are implement
 
 The paper:
 
-* 2025 – Błaszczyszyn, and Keeler, `Adaptive determinantal scheduling with fairness in wireless networks'.
+* 2025 – Błaszczyszyn, and Keeler, _Adaptive determinantal scheduling with fairness in wireless networks_.
 
 We have implemented all our mathematical results in MATLAB and Python code, which is located in  the respective repositories:
 
