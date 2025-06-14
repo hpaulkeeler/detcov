@@ -1,9 +1,9 @@
 # detschedule
-Determinantal scheduling in wireless networks (in MATLAB or Python).
+Determinantal scheduling for wireless networks implemented in both MATLAB and Python.
 
-We propose a new class of algorithms for randomly scheduling wireless network. The idea is to use (discrete) determinantal point processes (subsets) to randomly schedule medium access for subsets of transmitters and receivers. This approach can be seen as a natural extension of the (spatial) Aloha scheme, which schedules transmissions independently. 
+We propose a new class of algorithms for randomly scheduling wireless network. The idea is to use (discrete) determinantal point processes, which can be interpreted as subsets, to randomly schedule medium access for transmitters and receivers. This approach can be seen as a natural extension of the (spatial) Aloha scheme, which schedules transmissions independently. 
 
-For a demonstration of a determinantal process, run the (self-contained) files DemoDetPoisson.m or DemoDetPoisson.py to simulate or sample a single determinantally-thinned Poisson point process. 
+For a demonstration of a determinantal point process, run the (self-contained) files DemoDetPoisson.m or DemoDetPoisson.py to simulate or sample a single determinantally-thinned Poisson point process. 
 
 # Papers
 Some of the code  was used to generate results for published papers.
